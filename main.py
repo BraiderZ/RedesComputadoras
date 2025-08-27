@@ -38,12 +38,20 @@ pc2.plug(l_sw2_pc2)
 # "ARP" (tablas mínimas)
 pc1.set_arp(R_L_IP, R_L_MAC)  # PC1 conoce MAC del gateway
 pc2.set_arp(R_R_IP, R_R_MAC)  # PC2 conocería su gateway (no lo usamos para recepción)
+r.set_arp(PC1_IP, PC1_MAC)    # Router conoce MAC de PC1
 r.set_arp(PC2_IP, PC2_MAC)    # Router conoce MAC de PC2
 
 # Rutas (/1: 0xxxxxxx → izquierda, 1xxxxxxx → derecha)
 r.add_route(0b0, "g0/0")
 r.add_route(0b1, "g0/1")
 
-# =================== Demostración ===================
-# PC1 envía a PC2 por TCP:80 un mensaje de aplicación
-pc1.send_message(dst_ip=PC2_IP, dst_port=80, payload="Hola, PC2!", proto="TCP", src_port=50000)
+print("\n=================== SIMULACIÓN DE RED ===================\n")
+print("\n=================== PC1 -> PC2 (TCD-Whatsapp) ===================\n")
+# PC1 → PC2 usando WhatsApp por TCP (443)
+pc1.send_message(dst_ip=PC2_IP, app_id=1, payload="Hola!", proto="TCP")
+print("\n=================== PC2 -> PC1 (TCD-Gmail) ===================\n")
+# PC2 → PC1 usando Gmail por TCP (IMAPS 993)
+pc2.send_message(dst_ip=PC1_IP, app_id=3, payload="Nuevo correo", proto="TCP")
+print("\n=================== PC1 -> PC2 (UDP-Instagram) ===================\n")
+# PC1 → PC2 usando Instagram por UDP (HTTP/3 443/UDP)
+pc1.send_message(dst_ip=PC2_IP, app_id=2, payload="Foto enviada", proto="UDP")
