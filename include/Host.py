@@ -1,6 +1,6 @@
 from Datos import Frame, Packet, Segment
 from PhysicalLayer import show_h
-from Link import Link   
+from Link import Link
 from typing import Optional, Dict
 import re
 
@@ -14,7 +14,8 @@ APP_NAMES = {
 
 # Puertos de servicio (didácticos pero plausibles):
 # - TCP: casi todo viaja por 443 (HTTPS); Gmail por IMAPS 993 si no es vía web.
-# - UDP: 443 para QUIC/HTTP3; WhatsApp suele usar UDP para llamadas con STUN/ICE (p.ej. 3478).
+# - UDP: 443 para QUIC/HTTP3; WhatsApp suele usar UDP para llamadas
+#        con STUN/ICE (p.ej. 3478).
 SERVICE_PORTS = {
     "TCP": {
         1: 443,   # WhatsApp (HTTPS a su API/servicios)
@@ -49,7 +50,8 @@ class Host:
     def set_arp(self, ip: int, mac: int):
         self.arp[ip] = mac
 
-    def send_message(self, dst_ip: int, app_id: int, payload: str, proto: str = "TCP"):
+    def send_message(self, dst_ip: int, app_id: int,
+                     payload: str, proto: str = "TCP"):
         """
         Envío con selección de aplicación (1..5) y protocolo (TCP/UDP).
         En L4 se usa un ÚNICO puerto de servicio según (proto, app_id).
@@ -71,11 +73,13 @@ class Host:
         show_h(6, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}")
         show_h(6, "Mensaje", payload)
 
-        # Empaquetamos el app_id dentro del payload para poder mostrarlo al recibir
+        # Empaquetamos el app_id dentro del payload
+        # para poder mostrarlo al recibir
         encoded_payload = f"[APP={app_id}] {payload}"
 
         # ----- L4 (Transporte): un único puerto de servicio -----
-        seg = Segment(proto=proto, src_port=service_port, dst_port=service_port, payload=encoded_payload)
+        seg = Segment(proto=proto, src_port=service_port,
+                      dst_port=service_port, payload=encoded_payload)
         show_h(3, "Segmento (L4)")
         show_h(4, "Protocolo", seg.proto)
         show_h(4, "Puerto de servicio", str(service_port))
@@ -90,7 +94,8 @@ class Host:
         next_hop_ip = dst_ip if (dst_ip ^ self.ip) >> 7 == 0 else self.gateway_ip
         next_mac = self.arp.get(next_hop_ip)
         if next_mac is None:
-            raise RuntimeError(f"{self.name}: No conozco la MAC de {next_hop_ip} (ARP).")
+            raise RuntimeError(f"{self.name}: No conozco la"
+                               "MAC de {next_hop_ip} (ARP).")
 
         # ----- L2 (Enlace) -----
         frm = Frame(src_mac=self.mac, dst_mac=next_mac, eth_type=0x01, packet=pkt)

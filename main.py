@@ -1,10 +1,7 @@
-from typing import Dict, Optional
-from Datos import Frame, Packet, Segment
-from PhysicalLayer import show_bits
-from Link import Link
-from RouterL3 import RouterL3
-from SwitchL2 import SwitchL2
-from Host import Host
+from include.Link import Link
+from include.RouterL3 import RouterL3
+from include.SwitchL2 import SwitchL2
+from include.Host import Host
 
 # Direcciones (8 bits, valores hex para que se vean compactos)
 PC1_MAC, PC1_IP = 0x0A, 0x01
@@ -14,8 +11,8 @@ R_R_MAC, R_R_IP = 0x22, 0x90          # Router – interfaz derecha
 
 # Enlaces
 l_pc1_sw1 = Link()
-l_sw1_r   = Link()
-l_r_sw2   = Link()
+l_sw1_r = Link()
+l_r_sw2 = Link()
 l_sw2_pc2 = Link()
 
 # Dispositivos
@@ -23,7 +20,7 @@ pc1 = Host("PC1", PC1_MAC, PC1_IP, gateway_ip=R_L_IP)
 pc2 = Host("PC2", PC2_MAC, PC2_IP, gateway_ip=R_R_IP)
 sw1 = SwitchL2("Switch1")
 sw2 = SwitchL2("Switch2")
-r   = RouterL3("Router")
+r = RouterL3("Router")
 
 # Conexiones físicas
 pc1.plug(l_pc1_sw1)
@@ -37,7 +34,7 @@ pc2.plug(l_sw2_pc2)
 
 # "ARP" (tablas mínimas)
 pc1.set_arp(R_L_IP, R_L_MAC)  # PC1 conoce MAC del gateway
-pc2.set_arp(R_R_IP, R_R_MAC)  # PC2 conocería su gateway (no lo usamos para recepción)
+pc2.set_arp(R_R_IP, R_R_MAC)  # PC2 conocería su gateway (no en recepción)
 r.set_arp(PC1_IP, PC1_MAC)    # Router conoce MAC de PC1
 r.set_arp(PC2_IP, PC2_MAC)    # Router conoce MAC de PC2
 

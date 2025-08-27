@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from PhysicalLayer import to_bits, text_to_bits
 
+# TODO: Escribir docstrings de las clases.
+
+
 @dataclass
 class Segment:
     proto: str            # "TCP" o "UDP"
@@ -15,6 +18,8 @@ class Segment:
             to_bits(self.dst_port, 16) +
             text_to_bits(self.payload)
         )
+
+
 @dataclass
 class Packet:
     src_ip: int           # 8 bits (simplificado)
@@ -27,6 +32,7 @@ class Packet:
             to_bits(self.dst_ip, 8) +
             self.segment.bits()
         )
+
 
 @dataclass
 class Frame:
