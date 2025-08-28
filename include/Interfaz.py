@@ -18,8 +18,9 @@ keyboard = Controller()
 # Header
 # TODO: Agreguen sus carnets
 st.title(':blue[Simulador de transmisión de mensajes] ')
-st.subheader("Diego Alfaro Segura (C20259)," +
-             "\nPablo Salas Gómez (C27061)," +
+st.subheader("Diego Alfaro Segura (C20259), " +
+             "Pablo Salas Gómez (C27061), " +
+             "Luis Brenes Campos (C21324), " +
              "AGREGUEN CARNETS. Grupo \"Los Hamming\" ")
 
 st.sidebar.write(':blue[Instrucciones de uso: ]\n' +
