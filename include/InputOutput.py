@@ -72,6 +72,14 @@ def getInputs() -> dict[str, any]:
         'payload': payload,
         'proto': proto
     }
+
+    if pc_sender is pc1:
+        sw1.section = "tx"
+        sw2.section = "rx"
+    else:
+        sw1.section = "rx"
+        sw2.section = "tx"
+
     return pc_sender, inputs
 
 
