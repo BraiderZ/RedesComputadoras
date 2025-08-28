@@ -1,7 +1,7 @@
 from typing import Dict
-from include.Datos import Frame
-from include.Link import Link
-from include.PhysicalLayer import show_h
+from Datos import Frame
+from Link import Link
+from PhysicalLayer import show_h
 
 class SwitchL2:
     def __init__(self, name: str):

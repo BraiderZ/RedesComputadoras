@@ -1,5 +1,5 @@
 from typing import Optional, Tuple, Any
-from include.Datos import Frame
+from Datos import Frame
 
 
 # =================== Dispositivos ===================

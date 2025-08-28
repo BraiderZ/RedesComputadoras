@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from include.PhysicalLayer import to_bits, text_to_bits
+from PhysicalLayer import to_bits, text_to_bits
 
 # TODO: Escribir docstrings de las clases.
 

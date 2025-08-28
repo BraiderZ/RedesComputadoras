@@ -1,6 +1,6 @@
-from include.Datos import Frame, Packet, Segment
-from include.PhysicalLayer import show_h
-from include.Link import Link
+from Datos import Frame, Packet, Segment
+from PhysicalLayer import show_h
+from Link import Link
 from typing import Optional, Dict
 import re
 
