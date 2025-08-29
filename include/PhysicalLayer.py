@@ -14,7 +14,7 @@ def to_bits(value: int, width: int) -> str:
     return format(value, f"0{width}b")
 def text_to_bits(s: str) -> str:
     return "".join(format(ord(c), "08b") for c in s)
-def show_bits(label: str, bits: str, max_len: int = 64) -> None:
+def show_bits(label: str, bits: str, max_len: int = 255) -> None:
     # Para no saturar la consola, truncamos la visualización
     out = bits if len(bits) <= max_len else bits[:max_len] + "... ({} bits)".format(len(bits))
     print(f"{label}: {out}")

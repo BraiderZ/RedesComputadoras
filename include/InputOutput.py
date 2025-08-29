@@ -1,5 +1,4 @@
 import streamlit as st
-
 from Link import Link
 from RouterL3 import RouterL3
 from SwitchL2 import SwitchL2

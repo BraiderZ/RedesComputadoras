@@ -1,6 +1,3 @@
-# Versión de python: 3.12.1
-# Diego Alfaro Segura (C20259), Ismael José Alvarado Pérez (C20366)
-
 import streamlit as st
 import os
 import signal
@@ -9,7 +6,7 @@ from pynput.keyboard import Controller, Key
 from InputOutput import getInputs, printOutputs
 from PhysicalLayer import set_ui_handler
 
-# Limpieza de cache y establecer si se cierra quitar ventana
+# Limpieza de cache y establecer si se cierra quitar ventanar
 st.cache_data.clear()
 st.cache_resource.clear()
 
@@ -20,7 +17,7 @@ keyboard = Controller()
 st.title(':blue[Simulador de transmisión de mensajes] ')
 st.subheader("Diego Alfaro Segura (C20259)," +
              "\nPablo Salas Gómez (C27061)," +
-             "AGREGUEN CARNETS. Grupo \"Los Hamming\" ")
+             "\nBryan Cortés Espínola (C22422). Grupo \"Los Hamming\" ")
 
 st.sidebar.write(':blue[Instrucciones de uso: ]\n' +
                  'Ingrese los datos a simular y presione \'Simular\'. \n'

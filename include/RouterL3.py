@@ -29,9 +29,22 @@ class RouterL3:
         show_h(5, f"{self.name}: ENRUTAMIENTO L3 (entrada {port})", section="router")
 
         pkt = frame.packet
+
+
+        show_h(4,"Fisica (L1)", section="router")
+        show_h(3, "bits recibidos", f"{frame.bits()}", section="router")
+
+        show_h(4, "Enlace (L2)", section="router")
         show_h(4, "Paquete recibido", section="router")
         show_h(3, "IP Origen", f"{pkt.src_ip:02X}", section="router")
         show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="router")
+        show_h(3, "Trama recibida", str(frame), section="router")
+
+        show_h(4, "Red (L3)", section="router")
+        show_h(3, "IP Origen", f"{pkt.src_ip:02X}", section="router")
+        show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="router")
+        show_h(3, "Datagrama recibido", str(pkt), section="router")
+
 
         out_iface = None
         for pref, iface in self.route.items():
@@ -51,5 +64,10 @@ class RouterL3:
         show_h(4, "Reencapsulación L2", section="router")
         show_h(3, "MAC Origen", f"{new_frame.src_mac:02X}", section="router")
         show_h(3, "MAC Destino", f"{new_frame.dst_mac:02X}", section="router")
+        show_h(3, "Paquete", str(pkt), section="router")
+        
+
+        show_h(4, "Física (L1)", section="router")
+        show_h(3, "bits a enviar", f"{new_frame.bits()}", section="router")
 
         out_link.send(self, new_frame)

@@ -3,22 +3,34 @@ from PhysicalLayer import to_bits, text_to_bits
 
 # TODO: Escribir docstrings de las clases.
 
+@dataclass
+class Message:
+    app_id: int
+    payload: str
+    def bits(self) -> str:
+        return to_bits(self.app_id, 3) + text_to_bits(self.payload)
+
+    def __str__(self) -> str:
+        return f"{self.app_id} _ {self.payload}"
+
+
 
 @dataclass
 class Segment:
     proto: str            # "TCP" o "UDP"
     src_port: int         # 16 bits
     dst_port: int         # 16 bits
-    payload: str          # datos de aplicación (texto)
+    message: Message      # datos de aplicación
 
     def bits(self) -> str:
         return (
             text_to_bits(self.proto) +
             to_bits(self.src_port, 16) +
             to_bits(self.dst_port, 16) +
-            text_to_bits(self.payload)
+            self.message.bits()
         )
-
+    def __str__(self) -> str:
+        return f"{self.proto} _ {self.src_port} _ {self.dst_port} _ {self.message}"
 
 @dataclass
 class Packet:
@@ -32,7 +44,8 @@ class Packet:
             to_bits(self.dst_ip, 8) +
             self.segment.bits()
         )
-
+    def __str__(self) -> str:
+        return f"{self.src_ip} _ {self.dst_ip} _ {self.segment}"
 
 @dataclass
 class Frame:
@@ -48,3 +61,5 @@ class Frame:
             to_bits(self.eth_type, 8) +
             self.packet.bits()
         )
+    def __str__(self) -> str:
+        return f"{self.src_mac} _ {self.dst_mac} _ {self.eth_type} _ {self.packet}"
