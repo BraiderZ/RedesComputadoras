@@ -32,7 +32,7 @@ class RouterL3:
 
 
         show_h(4,"Fisica (L1)", section="router")
-        show_h(3, "bits recibidos", f"{frame.bits()}", section="router")
+        show_h(3, "Bits recibidos", f"{frame.bits()}", section="router")
 
         show_h(4, "Enlace (L2)", section="router")
         show_h(4, "Paquete recibido", section="router")
@@ -68,6 +68,6 @@ class RouterL3:
         
 
         show_h(4, "Física (L1)", section="router")
-        show_h(3, "bits a enviar", f"{new_frame.bits()}", section="router")
+        show_h(3, "Bits a enviar", f"{new_frame.bits()}", section="router")
 
         out_link.send(self, new_frame)

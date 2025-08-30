@@ -18,7 +18,7 @@ st.title(':blue[Simulador de transmisión de mensajes] ')
 st.subheader("Diego Alfaro Segura (C20259), " +
              "Pablo Salas Gómez (C27061), " +
              "Luis Brenes Campos (C21324), " +
-             "Bryan Cortés Espínola (C22422)" +
+             "Bryan Cortés Espínola (C22422) " +
              "Grupo \"Los Hamming\" ")
 
 st.sidebar.write(':blue[Instrucciones de uso: ]\n' +

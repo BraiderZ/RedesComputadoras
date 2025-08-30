@@ -66,7 +66,7 @@ class Host:
 
         service_port = SERVICE_PORTS[proto][app_id]
 
-        show_h(5, f"{self.name}: APLICACIÓN → TRANSPORTE → RED → ENLACE", section="tx")
+        show_h(5, f"{self.name}: TRANSMISIÓN Y BAJADA DE CAPAS", section="tx")
 
         # ----- L5 (Aplicación) -----
         message = Message(app_id=app_id, payload=payload)
@@ -119,7 +119,7 @@ class Host:
 
         # ------ L1 (Física) -----
         show_h(4, "Física (L1)", section="tx")
-        show_h(3, "bits", f"{frm.bits()}", section="tx")
+        show_h(3, "Bits", f"{frm.bits()}", section="tx")
 
 
         if self.link:
@@ -137,7 +137,7 @@ class Host:
 
         # ----- L1 -----
         show_h(4, "Física (L1)", section="rx")
-        show_h(3, "bits recibidos", f"{frame.bits()}", section="rx")
+        show_h(3, "Bits recibidos", f"{frame.bits()}", section="rx")
 
         # ----- L2 -----
         show_h(4, "Enlace (L2)", section="rx")

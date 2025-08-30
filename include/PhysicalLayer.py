@@ -22,7 +22,7 @@ def show_bits(label: str, bits: str, max_len: int = 255) -> None:
 def show_h(level: int, label: str, msg: str = "", section: Optional[str] = None) -> None:
     """
     Emite un mensaje jerárquico. Si hay handler, lo invoca con la sección.
-    section: 'tx' | 'router' | 'rx' (por defecto 'router').
+    section: 'tx' | 'router' | 'rx'.
     """
     if _UI_HANDLER is not None:
         sec = section or "router"

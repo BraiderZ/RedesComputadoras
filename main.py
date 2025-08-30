@@ -31,7 +31,7 @@ if not faltanPaquetes:
         while True:
             retcode = process.poll()  # Check if the process has terminated
             if retcode is not None:
-                print("Programa cerrado correctamente.")
+                print("Programa cerrado correctamente")
                 break
             time.sleep(1)  # Wait a bit before checking again
 
@@ -46,13 +46,13 @@ if not faltanPaquetes:
         # Attempt to close the Streamlit app gracefully
         process.terminate()  # Send terminate signal to Streamlit
         process.wait()  # Wait for the process to terminate
-        print("Programa finalizado con CTRL + C.")
+        print("Programa finalizado con CTRL + C")
     finally:
         # Ensure the process is killed if it's still running
         if process.poll() is None:
             print("Finalizando el proceso de streamlit...")
             process.kill()
 else:
-    print('\nNo tiene las librerías requeridas instaladas. ' +
+    print('\nNo tiene las librerías requeridas instaladas' +
           'Para usar el programa, debe instalarlas con el comando:\n' +
-          'pip install streamlit pynput Pillow')
+          'pip install -r requirements.txt')

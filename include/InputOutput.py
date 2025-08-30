@@ -60,7 +60,6 @@ def getInputs() -> dict[str, any]:
     payload = st.text_input('Payload a enviar', 'Hola Mundo!')
     proto = st.selectbox('Protocolo', ['TCP', 'UDP'])
 
-    #
     dst_ip = PC1_IP if pc_receptor == 'PC 1' else PC2_IP
     app_id = APP_NAMES.get(aplicacion)
 
@@ -72,6 +71,7 @@ def getInputs() -> dict[str, any]:
         'proto': proto
     }
 
+    # Defina la sección para prints de Switches
     if pc_sender is pc1:
         sw1.section = "tx"
         sw2.section = "rx"
