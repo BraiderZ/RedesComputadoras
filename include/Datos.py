@@ -62,4 +62,4 @@ class Frame:
             self.packet.bits()
         )
     def __str__(self) -> str:
-        return f"{self.src_mac} _ {self.dst_mac} _ {self.eth_type} _ {self.packet}"
+        return f"{self.src_mac} _ {self.dst_mac} _ {self.packet}"
