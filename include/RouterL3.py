@@ -36,8 +36,8 @@ class RouterL3:
 
         show_h(4, "Enlace (L2)", section="router")
         show_h(4, "Paquete recibido", section="router")
-        show_h(3, "IP Origen", f"{pkt.src_ip:02X}", section="router")
-        show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="router")
+        show_h(3, "MAC Origen", f"{frame.src_mac:02X}", section="router")
+        show_h(3, "MAC Destino", f"{frame.dst_mac:02X}", section="router")
         show_h(3, "Trama recibida", str(frame), section="router")
 
         show_h(4, "Red (L3)", section="router")
