@@ -64,7 +64,7 @@ class RouterL3:
         show_h(4, "Reencapsulación L2", section="router")
         show_h(3, "MAC Origen", f"{new_frame.src_mac:02X}", section="router")
         show_h(3, "MAC Destino", f"{new_frame.dst_mac:02X}", section="router")
-        show_h(3, "Paquete", str(pkt), section="router")
+        show_h(3, "Trama enviada", str(new_frame), section="router")
         
 
         show_h(4, "Física (L1)", section="router")
