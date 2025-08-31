@@ -45,7 +45,7 @@ class Host:
 
     def plug(self, link: Link):
         self.link = link
-        link.connect(self, "eth0")
+        link.connect(self, "host")
 
     def set_arp(self, ip: int, mac: int):
         self.arp[ip] = mac
@@ -104,11 +104,10 @@ class Host:
                                "MAC de {next_hop_ip} (ARP).")
 
         # ----- L2 (Enlace) -----
-        frm = Frame(src_mac=self.mac, dst_mac=next_mac, eth_type=0x01, packet=pkt)
+        frm = Frame(src_mac=self.mac, dst_mac=next_mac, packet=pkt)
         show_h(4, "Trama (L2)", section="tx")
         show_h(3, "MAC Origen", f"{frm.src_mac:02X}", section="tx")
         show_h(3, "MAC Destino", f"{frm.dst_mac:02X}", section="tx")
-        show_h(3, "EthType", f"{frm.eth_type:02X}", section="tx")
         show_h(3, "IP Origen", f"{pkt.src_ip:02X}", section="tx")
         show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="tx")
         show_h(3, "Protocolo", seg.proto, section="tx")

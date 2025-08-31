@@ -51,14 +51,12 @@ class Packet:
 class Frame:
     src_mac: int          # 8 bits (simplificado)
     dst_mac: int          # 8 bits (simplificado)
-    eth_type: int         # 8 bits (0x01 = IPv4 simplificado)
     packet: Packet
 
     def bits(self) -> str:
         return (
             to_bits(self.src_mac, 8) +
             to_bits(self.dst_mac, 8) +
-            to_bits(self.eth_type, 8) +
             self.packet.bits()
         )
     def __str__(self) -> str:

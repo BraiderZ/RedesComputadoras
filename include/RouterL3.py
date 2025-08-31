@@ -59,14 +59,12 @@ class RouterL3:
         if next_hop_mac is None:
             raise RuntimeError(f"{self.name}: No conozco la MAC del siguiente salto para {pkt.dst_ip:02X}")
 
-        new_frame = Frame(src_mac=out_mac, dst_mac=next_hop_mac, eth_type=0x01, packet=pkt)
+        new_frame = Frame(src_mac=out_mac, dst_mac=next_hop_mac, packet=pkt)
 
         show_h(4, "Reencapsulación L2", section="router")
         show_h(3, "MAC Origen", f"{new_frame.src_mac:02X}", section="router")
         show_h(3, "MAC Destino", f"{new_frame.dst_mac:02X}", section="router")
         show_h(3, "Trama enviada", str(new_frame), section="router")
-        
-
         show_h(4, "Física (L1)", section="router")
         show_h(3, "Bits a enviar", f"{new_frame.bits()}", section="router")
 
