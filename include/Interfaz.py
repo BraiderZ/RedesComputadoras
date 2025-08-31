@@ -6,6 +6,7 @@ from pynput.keyboard import Controller, Key
 from InputOutput import getInputs, printOutputs
 from PhysicalLayer import set_ui_handler
 
+# ---------- Personalizar interfaz ----------
 # Limpieza de cache y establecer si se cierra quitar ventanar
 st.cache_data.clear()
 st.cache_resource.clear()
@@ -13,7 +14,6 @@ st.cache_resource.clear()
 keyboard = Controller()
 
 # Header
-# TODO: Agreguen sus carnets
 st.title(':blue[Simulador de transmisión de mensajes] ')
 st.subheader("Diego Alfaro Segura (C20259), " +
              "Pablo Salas Gómez (C27061), " +
@@ -29,26 +29,31 @@ st.sidebar.write('Para cerrar el programa porfavor usar este botón, ' +
                  'no cerrar la pestaña pues tendrá que cerrar la terminal' +
                  ' con CTRL + C ¡En windows podría tardar unos segundos!')
 
+# Manejar botón para cerrar interfaz
 if st.sidebar.button("Cerrar programa"):
     time.sleep(0.0005)
-    with keyboard.pressed(Key.ctrl):  # This will hold down the 'ctrl' key
-        keyboard.press('w')            # Press 'w'
+    with keyboard.pressed(Key.ctrl):
+        keyboard.press('w')
         time.sleep(0.1)
-        keyboard.release('w')          # Release 'w'
+        keyboard.release('w')
     os.kill(os.getppid(), signal.SIGINT)
-else:    
-    # Inputs generales.
+else:
+    # Generar menú de Inputs
     pc_sender, inputs = getInputs()
 
+    # Botón para generar simulación
     simular = st.button("Simular", type="primary")
 
+    # Obtener outputs y renderizarlos
     if simular:
         tx_entries: list[tuple[int, str, str]] = []
         router_entries: list[tuple[int, str, str]] = []
         rx_entries: list[tuple[int, str, str]] = []
 
-        def _ui_handler(level: int, label: str, msg: str, section: str) -> None:
-            """Clasifica cada línea en 'tx', 'router' o 'rx' y la guarda localmente."""
+        def _ui_handler(level: int, label: str, msg: str,
+                        section: str) -> None:
+            """Clasifica cada línea en 'tx', 'router' o 'rx'
+            y la guarda localmente."""
             entry = (level, label, msg)
             if section == "tx":
                 tx_entries.append(entry)

@@ -2,7 +2,6 @@ from Datos import Frame, Packet, Segment, Message
 from PhysicalLayer import show_h
 from Link import Link
 from typing import Optional, Dict
-import re
 
 APP_NAMES = {
     1: "WhatsApp",
@@ -35,7 +34,20 @@ SERVICE_PORTS = {
 
 
 class Host:
+    """ Clase para definir una PC.
+    """
     def __init__(self, name: str, mac: int, ip: int, gateway_ip: int):
+        """ Constructor para crear PC.
+
+        :param name: Nombre
+        :type name: str
+        :param mac: MAC
+        :type mac: int
+        :param ip: IP
+        :type ip: int
+        :param gateway_ip: Gateway IP
+        :type gateway_ip: int
+        """
         self.name = name
         self.mac = mac
         self.ip = ip
@@ -44,26 +56,41 @@ class Host:
         self.arp: Dict[int, int] = {}  # IP → MAC
 
     def plug(self, link: Link):
+        """ Conectar PC a un puerto.
+
+        :param link: Enlace al que conectar
+        :type link: Link
+        """
         self.link = link
         link.connect(self, "host")
 
     def set_arp(self, ip: int, mac: int):
+        """ Establece el protocolo de resolución de direcciones
+
+        :param ip: IP
+        :type ip: int
+        :param mac: MAC
+        :type mac: int
+        """
         self.arp[ip] = mac
 
     def send_message(self, dst_ip: int, app_id: int,
                      payload: str, proto: str = "TCP"):
-        """
+        """ Enviar mensaje.
         Envío con selección de aplicación (1..5) y protocolo (TCP/UDP).
         En L4 se usa un ÚNICO puerto de servicio según (proto, app_id).
         En L5 se imprime (número de app, mensaje).
+
+        :param dst_ip: IP destino
+        :type dst_ip: int
+        :param app_id: Identificador de aplicación
+        :type app_id: int
+        :param payload: Mensaje
+        :type payload: str
+        :param proto: Protocolo, defaults to "TCP"
+        :type proto: str, optional
         """
         proto = proto.upper()
-        if proto not in ("TCP", "UDP"):
-            raise ValueError(f"{self.name}: Protocolo no soportado: {proto}")
-
-        if app_id not in APP_NAMES:
-            raise ValueError(f"{self.name}: app_id inválido (1..5): {app_id}")
-
         service_port = SERVICE_PORTS[proto][app_id]
 
         show_h(5, f"{self.name}: TRANSMISIÓN Y BAJADA DE CAPAS", section="tx")
@@ -71,7 +98,8 @@ class Host:
         # ----- L5 (Aplicación) -----
         message = Message(app_id=app_id, payload=payload)
         show_h(4, "Aplicación (L5)", section="tx")
-        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}", section="tx")
+        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}",
+               section="tx")
         show_h(3, "Datos", payload, section="tx")
         show_h(3, "Mensaje", str(message), section="tx")
 
@@ -81,7 +109,8 @@ class Host:
         show_h(4, "Transporte (L4)", section="tx")
         show_h(3, "Protocolo", seg.proto, section="tx")
         show_h(3, "Puerto de servicio", str(service_port), section="tx")
-        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}", section="tx")
+        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}",
+               section="tx")
         show_h(3, "Datos", payload, section="tx")
         show_h(3, "Segmento", str(seg), section="tx")
 
@@ -92,16 +121,16 @@ class Host:
         show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="tx")
         show_h(3, "Protocolo", seg.proto, section="tx")
         show_h(3, "Puerto de servicio", str(service_port), section="tx")
-        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}", section="tx")
+        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}",
+               section="tx")
         show_h(3, "Datos", payload, section="tx")
         show_h(3, "Datagrama", str(pkt), section="tx")
 
         # Decidir siguiente salto (modelo /1 con bit más alto)
-        next_hop_ip = dst_ip if (dst_ip ^ self.ip) >> 7 == 0 else self.gateway_ip
+        next_hop_ip = (
+            dst_ip if (dst_ip ^ self.ip) >> 7 == 0 else self.gateway_ip
+            )
         next_mac = self.arp.get(next_hop_ip)
-        if next_mac is None:
-            raise RuntimeError(f"{self.name}: No conozco la"
-                               "MAC de {next_hop_ip} (ARP).")
 
         # ----- L2 (Enlace) -----
         frm = Frame(src_mac=self.mac, dst_mac=next_mac, packet=pkt)
@@ -112,19 +141,26 @@ class Host:
         show_h(3, "IP Destino", f"{pkt.dst_ip:02X}", section="tx")
         show_h(3, "Protocolo", seg.proto, section="tx")
         show_h(3, "Puerto de servicio", str(service_port), section="tx")
-        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}", section="tx")
+        show_h(3, "App seleccionada", f"{app_id} - {APP_NAMES[app_id]}",
+               section="tx")
         show_h(3, "Datos", payload, section="tx")
-        show_h(3, "Trama", str(frm), section="tx") 
+        show_h(3, "Trama", str(frm), section="tx")
 
         # ------ L1 (Física) -----
         show_h(4, "Física (L1)", section="tx")
         show_h(3, "Bits", f"{frm.bits()}", section="tx")
 
-
         if self.link:
             self.link.send(self, frm)
 
     def receive(self, port: str, frame: Frame):
+        """ Recibir mensaje.
+
+        :param port: Puerto usado para comunicación
+        :type port: str
+        :param frame: Frame recibido.
+        :type frame: Frame
+        """
         if frame.dst_mac != self.mac:
             return
 
@@ -132,7 +168,7 @@ class Host:
 
         pkt = frame.packet
         seg = pkt.segment
-        message = seg.message   
+        message = seg.message
 
         # ----- L1 -----
         show_h(4, "Física (L1)", section="rx")
@@ -147,7 +183,9 @@ class Host:
         show_h(3, "Protocolo", seg.proto, section="rx")
         show_h(3, "Puerto de servicio", str(seg.dst_port), section="rx")
         if message.app_id in APP_NAMES:
-            show_h(3, "App recibida", f"{message.app_id} - {APP_NAMES[message.app_id]}", section="rx")
+            show_h(3, "App recibida",
+                   f"{message.app_id} - {APP_NAMES[message.app_id]}",
+                   section="rx")
         else:
             show_h(3, "App recibida", "No especificada", section="rx")
         show_h(3, "Mensaje recibido", message.payload, section="rx")
@@ -160,7 +198,9 @@ class Host:
         show_h(3, "Protocolo", seg.proto, section="rx")
         show_h(3, "Puerto de servicio", str(seg.dst_port), section="rx")
         if message.app_id in APP_NAMES:
-            show_h(3, "App recibida", f"{message.app_id} - {APP_NAMES[message.app_id]}", section="rx")
+            show_h(3, "App recibida",
+                   f"{message.app_id} - {APP_NAMES[message.app_id]}",
+                   section="rx")
         else:
             show_h(3, "App recibida", "No especificada", section="rx")
         show_h(3, "Mensaje recibido", message.payload, section="rx")
@@ -171,7 +211,9 @@ class Host:
         show_h(3, "Protocolo", seg.proto, section="rx")
         show_h(3, "Puerto de servicio", str(seg.dst_port), section="rx")
         if message.app_id in APP_NAMES:
-            show_h(3, "App recibida", f"{message.app_id} - {APP_NAMES[message.app_id]}", section="rx")
+            show_h(3, "App recibida",
+                   f"{message.app_id} - {APP_NAMES[message.app_id]}",
+                   section="rx")
         else:
             show_h(3, "App recibida", "No especificada", section="rx")
         show_h(3, "Mensaje recibido", message.payload, section="rx")
@@ -180,7 +222,9 @@ class Host:
         # ----- L5 (extraer app y mensaje del payload) -----
         show_h(4, "Aplicación (L5)", section="rx")
         if message.app_id in APP_NAMES:
-            show_h(3, "App recibida", f"{message.app_id} - {APP_NAMES[message.app_id]}", section="rx")
+            show_h(3, "App recibida",
+                   f"{message.app_id} - {APP_NAMES[message.app_id]}",
+                   section="rx")
         else:
             show_h(3, "App recibida", "No especificada", section="rx")
         show_h(3, "Datos recibidos", message.payload, section="rx")

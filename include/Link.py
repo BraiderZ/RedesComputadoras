@@ -35,7 +35,7 @@ class Link:
 
         :param sender: Nodo emisor del mensaje
         :type sender: Any
-        :param frame: #TODO: Escribir descripción de param frame
+        :param frame: Frame
         :type frame: Frame
         """
         target = None

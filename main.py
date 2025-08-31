@@ -5,7 +5,6 @@ import threading
 import time
 
 # Se busca si se tienen todos los paquetes
-
 faltanPaquetes = False
 listaPaquetes = ['streamlit', 'pynput', 'PIL']
 
@@ -17,38 +16,37 @@ for paquete in listaPaquetes:
         faltanPaquetes = True
 
 if not faltanPaquetes:
-    # Path to your Streamlit app
+    # Dirección a interfaz
     app_path = 'include/Interfaz.py'
 
-    # Command to run Streamlit
+    # Correr aplicación
     command = ['streamlit', 'run', app_path]
 
-    # Start the process
+    # Iniciar subproceso para interfaz
     process = subprocess.Popen(command)
 
     def monitor_process(process):
-        # Monitor the process and terminate it if closed
+        # Finalizar el proceso si se cierra
         while True:
-            retcode = process.poll()  # Check if the process has terminated
+            retcode = process.poll()
             if retcode is not None:
                 print("Programa cerrado correctamente")
                 break
-            time.sleep(1)  # Wait a bit before checking again
+            time.sleep(1)
 
-    # Start monitoring in a separate thread
+    # Usar un thread para monitoreo
     monitor_thread = threading.Thread(target=monitor_process, args=(process,))
     monitor_thread.start()
 
     try:
-        # Wait for the monitoring thread to finish
         monitor_thread.join()
     except KeyboardInterrupt:
-        # Attempt to close the Streamlit app gracefully
-        process.terminate()  # Send terminate signal to Streamlit
-        process.wait()  # Wait for the process to terminate
+        # Cerrar proceso
+        process.terminate()
+        process.wait()
         print("Programa finalizado con CTRL + C")
     finally:
-        # Ensure the process is killed if it's still running
+        # Asegurarse de que se termina si no se cierra
         if process.poll() is None:
             print("Finalizando el proceso de streamlit...")
             process.kill()

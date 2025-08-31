@@ -4,6 +4,7 @@ from RouterL3 import RouterL3
 from SwitchL2 import SwitchL2
 from Host import Host
 
+# ---------- Se definen las conexiones generales ----------
 # Direcciones (8 bits, valores hex para que se vean compactos)
 PC1_MAC, PC1_IP = 0x0A, 0x01
 PC2_MAC, PC2_IP = 0x0B, 0x82          # Nota: bit más alto=1 → "otra red" (/1)
@@ -43,6 +44,7 @@ r.set_arp(PC2_IP, PC2_MAC)    # Router conoce MAC de PC2
 r.add_route(0b0, "g0/0")
 r.add_route(0b1, "g0/1")
 
+# Identificadores para cada tipo de apliación
 APP_NAMES = {
     "WhatsApp":  1,
     "Instagram": 2,
@@ -53,6 +55,11 @@ APP_NAMES = {
 
 
 def getInputs() -> dict[str, any]:
+    """ Función para manejar inputs en interfaz gráfica.
+
+    :return: Resultados necesarios para ejecutar programa.
+    :rtype: dict[str, any]
+    """
     # Obtener inputs
     st.write('Ingrese los valores de la simulación:')
     pc_receptor = st.selectbox('PC receptor', ['PC 1', 'PC 2'])
@@ -60,9 +67,9 @@ def getInputs() -> dict[str, any]:
     payload = st.text_input('Payload a enviar', 'Hola Mundo!')
     proto = st.selectbox('Protocolo', ['TCP', 'UDP'])
 
+    # Convertir los necesarios
     dst_ip = PC1_IP if pc_receptor == 'PC 1' else PC2_IP
     app_id = APP_NAMES.get(aplicacion)
-
     pc_sender = pc2 if pc_receptor == 'PC 1' else pc1
     inputs = {
         'dst_ip': dst_ip,
@@ -83,8 +90,14 @@ def getInputs() -> dict[str, any]:
 
 
 def printOutputs(pc_sender: Host, inputs: dict[str, any]):
+    """ Generar los outputs en la interfaz gráfica.
+
+    :param pc_sender: PC transmisora
+    :type pc_sender: Host
+    :param inputs: Inputs ingresados por usuarios
+    :type inputs: dict[str, any]
+    """
     pc_sender.send_message(dst_ip=inputs.get('dst_ip'),
                            app_id=inputs.get('app_id'),
                            payload=inputs.get('payload'),
                            proto=inputs.get('proto'))
-    print("\n")
