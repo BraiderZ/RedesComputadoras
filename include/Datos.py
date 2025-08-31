@@ -30,7 +30,7 @@ class Segment:
             self.message.bits()
         )
     def __str__(self) -> str:
-        return f"{self.proto} _ {self.src_port} _ {self.dst_port} _ {self.message}"
+        return f" {self.dst_port} _ {self.message}"
 
 @dataclass
 class Packet:
